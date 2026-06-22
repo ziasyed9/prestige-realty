@@ -5,9 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
-  { label: "Home", href: "/" },
+  { label: "Home",     href: "/" },
   { label: "Listings", href: "/listings" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Contact",  href: "/#contact" },
 ];
 
 export default function Navbar() {
@@ -15,10 +15,11 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
+  const isHomePage = pathname === "/";
+  const showSolid = !isHomePage || isScrolled;
+
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -26,20 +27,16 @@ export default function Navbar() {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        transition: "all 300ms",
-        backgroundColor: isScrolled ? "rgba(255,255,255,0.95)" : "transparent",
-        backdropFilter: isScrolled ? "blur(8px)" : "none",
-        borderBottom: isScrolled ? "1px solid var(--color-stone-dark)" : "none",
-        boxShadow: isScrolled ? "0 1px 8px rgba(15,23,42,0.06)" : "none",
-      }}
-    >
+    <header style={{
+      position: "fixed",
+      top: 0, left: 0, right: 0,
+      zIndex: 50,
+      transition: "all 300ms",
+      backgroundColor: showSolid ? "rgba(255,255,255,0.95)" : "transparent",
+      backdropFilter: showSolid ? "blur(8px)" : "none",
+      borderBottom: showSolid ? "1px solid var(--color-stone-dark)" : "none",
+      boxShadow: showSolid ? "0 1px 8px rgba(15,23,42,0.06)" : "none",
+    }}>
       <nav className="container-site">
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "4.5rem" }}>
 
@@ -58,7 +55,7 @@ export default function Navbar() {
                 fontWeight: 700,
                 fontSize: "1.125rem",
                 letterSpacing: "0.05em",
-                color: isScrolled ? "var(--color-navy)" : "white",
+                color: showSolid ? "var(--color-navy)" : "white",
                 transition: "color 300ms",
               }}>
                 Prestige
@@ -68,7 +65,7 @@ export default function Navbar() {
                 fontSize: "0.65rem",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                color: isScrolled ? "var(--color-navy-muted)" : "rgba(255,255,255,0.7)",
+                color: showSolid ? "var(--color-navy-muted)" : "rgba(255,255,255,0.7)",
                 transition: "color 300ms",
               }}>
                 Properties
@@ -89,7 +86,7 @@ export default function Navbar() {
                   textDecoration: "none",
                   color: isActive(link.href)
                     ? "var(--color-gold)"
-                    : isScrolled ? "var(--color-navy)" : "rgba(255,255,255,0.9)",
+                    : showSolid ? "var(--color-navy)" : "rgba(255,255,255,0.9)",
                   transition: "color 200ms",
                   borderBottom: isActive(link.href) ? "1px solid var(--color-gold)" : "1px solid transparent",
                   paddingBottom: "2px",
@@ -100,25 +97,22 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* CTA BUTTON */}
+          {/* CTA */}
           <div className="desktop-nav">
-            <Link
-              href="/#contact"
-              style={{
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                padding: "0.625rem 1.25rem",
-                border: isScrolled ? "1px solid var(--color-navy)" : "1px solid rgba(255,255,255,0.7)",
-                color: isScrolled ? "var(--color-navy)" : "white",
-                textDecoration: "none",
-                transition: "all 200ms",
-              }}
-            >
+            <Link href="/#contact" style={{
+              fontSize: "0.875rem",
+              fontWeight: 600,
+              padding: "0.625rem 1.25rem",
+              border: showSolid ? "1px solid var(--color-navy)" : "1px solid rgba(255,255,255,0.7)",
+              color: showSolid ? "var(--color-navy)" : "white",
+              textDecoration: "none",
+              transition: "all 200ms",
+            }}>
               Book a Viewing
             </Link>
           </div>
 
-          {/* HAMBURGER — mobile only */}
+          {/* HAMBURGER */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-expanded={isMenuOpen}
@@ -127,24 +121,19 @@ export default function Navbar() {
             style={{ background: "none", border: "none", cursor: "pointer", padding: "0.5rem", display: "flex", flexDirection: "column", gap: "5px" }}
           >
             {[0, 1, 2].map((i) => (
-              <span
-                key={i}
-                style={{
-                  display: "block",
-                  width: "20px",
-                  height: "2px",
-                  backgroundColor: isScrolled ? "var(--color-navy)" : "white",
-                  transition: "all 200ms",
-                  transform: isMenuOpen
-                    ? i === 0 ? "rotate(45deg) translate(5px, 5px)"
-                    : i === 1 ? "scaleX(0)"
-                    : "rotate(-45deg) translate(5px, -5px)"
-                    : "none",
-                }}
-              />
+              <span key={i} style={{
+                display: "block",
+                width: "20px", height: "2px",
+                backgroundColor: showSolid ? "var(--color-navy)" : "white",
+                transition: "all 200ms",
+                transform: isMenuOpen
+                  ? i === 0 ? "rotate(45deg) translate(5px, 5px)"
+                  : i === 1 ? "scaleX(0)"
+                  : "rotate(-45deg) translate(5px, -5px)"
+                  : "none",
+              }} />
             ))}
           </button>
-
         </div>
 
         {/* MOBILE MENU */}
@@ -155,9 +144,7 @@ export default function Navbar() {
             padding: "1rem 0.5rem",
           }}>
             {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
+              <Link key={link.label} href={link.href}
                 onClick={() => setIsMenuOpen(false)}
                 style={{
                   display: "block",
@@ -180,10 +167,8 @@ export default function Navbar() {
             </div>
           </div>
         )}
-
       </nav>
 
-      {/* Hide/show desktop vs mobile via CSS */}
       <style>{`
         .desktop-nav { display: flex; }
         .mobile-menu-btn { display: none; }
