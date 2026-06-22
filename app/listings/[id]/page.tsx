@@ -36,12 +36,12 @@ export default async function PropertyPage({
   // If the id doesn't match any property, show Next.js's built-in 404 page.
   if (!property) notFound();
 
-  const statusConfig = {
+  const statusConfig: Record<string, { label: string; color: string }> = {
     "for-sale":    { label: "For Sale",    color: "var(--color-gold)" },
     "sold":        { label: "Sold",        color: "var(--color-navy-muted)" },
     "coming-soon": { label: "Coming Soon", color: "var(--color-navy)" },
   };
-
+  
   const status = statusConfig[property.status];
 
   return (
