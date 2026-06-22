@@ -28,31 +28,43 @@
    Base styles: global element defaults
    In v4 we write plain CSS here, not @apply
    ---------------------------------------- */
-@layer base {
-  html {
-    background-color: var(--color-stone);
-    color: var(--color-navy);
-    scroll-behavior: smooth;
+   @layer base {
+    html {
+      background-color: var(--color-stone);
+      color: var(--color-navy);
+      scroll-behavior: smooth;
+    }
+  
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  
+    /* This is the key line — every element inherits Inter by default */
+    *, *::before, *::after {
+      font-family: var(--font-sans);
+    }
+  
+    body {
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+  
+    /* Only headings use Playfair */
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      line-height: 1.1;
+    }
+  
+    /* Reset heading margin so spacing is controlled per-component */
+    h1, h2, h3, h4, h5, h6, p {
+      margin: 0;
+    }
   }
-
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-  }
-
-  body {
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
-  h1, h2, h3 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    line-height: 1.1;
-  }
-}
 
 /* ----------------------------------------
    Reusable component classes
