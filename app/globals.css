@@ -1,9 +1,37 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+
+@theme {
+  /* Brand colours */
+  --color-navy:       #0F172A;
+  --color-navy-light: #1E293B;
+  --color-navy-muted: #334155;
+
+  --color-gold:       #B8902A;
+  --color-gold-light: #D4A843;
+  --color-gold-muted: #F5E6C8;
+
+  --color-stone:      #F8F6F1;
+  --color-stone-dark: #EDE9E1;
+
+  /* Fonts — these reference the CSS variables 
+     that next/font will inject onto <html> */
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-sans:    var(--font-inter), system-ui, sans-serif;
+
+  /* Custom shadows */
+  --shadow-card:       0 2px 16px rgba(15, 23, 42, 0.08);
+  --shadow-card-hover: 0 8px 32px rgba(15, 23, 42, 0.15);
+}
+
+/* ----------------------------------------
+   Base styles: global element defaults
+   In v4 we write plain CSS here, not @apply
+   ---------------------------------------- */
 @layer base {
   html {
+    background-color: var(--color-stone);
+    color: var(--color-navy);
     scroll-behavior: smooth;
   }
 
@@ -12,43 +40,86 @@
   }
 
   body {
-    @apply font-sans antialiased;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 
   h1, h2, h3 {
-    @apply font-display font-bold leading-tight;
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.1;
   }
 }
 
+/* ----------------------------------------
+   Reusable component classes
+   In v4 inside @layer components, write
+   plain CSS instead of @apply
+   ---------------------------------------- */
 @layer components {
+
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2
-           bg-gold text-white font-semibold
-           px-6 py-3
-           transition-all duration-200
-           hover:bg-gold-light active:scale-95
-           focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: var(--color-gold);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: all 200ms;
+  }
+  .btn-primary:hover  { background-color: var(--color-gold-light); }
+  .btn-primary:active { transform: scale(0.95); }
+  .btn-primary:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
   }
 
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2
-           border border-navy text-navy font-semibold
-           px-6 py-3
-           transition-all duration-200
-           hover:bg-navy hover:text-white active:scale-95
-           focus:outline-none focus:ring-2 focus:ring-navy focus:ring-offset-2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid var(--color-navy);
+    color: var(--color-navy);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: all 200ms;
   }
+  .btn-outline:hover  { background-color: var(--color-navy); color: white; }
+  .btn-outline:active { transform: scale(0.95); }
 
+  /* Max-width wrapper used on every section */
   .container-site {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-site { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .container-site { padding-left: 2rem; padding-right: 2rem; }
   }
 
+  /* Gold underline accent on section headings */
   .heading-accent {
-    @apply relative pb-4;
+    position: relative;
+    padding-bottom: 1rem;
   }
-
   .heading-accent::after {
     content: "";
-    @apply absolute bottom-0 left-0 w-12 h-0.5 bg-gold;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 3rem;
+    height: 2px;
+    background-color: var(--color-gold);
   }
 }
